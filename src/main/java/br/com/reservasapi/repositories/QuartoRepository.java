@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface QuartoRepository extends JpaRepository<Quarto, Integer> {
+public interface QuartoRepository extends JpaRepository<Quarto, Long> {
     List<Quarto> findByHotelId(Long hotelId);
     List<Quarto> findByDisponivelTrue();
 }
