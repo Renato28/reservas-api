@@ -25,8 +25,13 @@ public class HotelController {
         return ResponseEntity.ok(hotelService.buscarPorId(id));
     }
 
+    @PostMapping
+    public ResponseEntity<HotelDto> salvar(@RequestBody HotelDto dto) {
+        return ResponseEntity.ok(hotelService.salvar(dto));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<HotelDto> atualizar(@PathVariable Long id, HotelDto dto) {
+    public ResponseEntity<HotelDto> atualizar(@PathVariable Long id, @RequestBody HotelDto dto) {
         return ResponseEntity.ok(hotelService.atualizar(id, dto));
     }
 
