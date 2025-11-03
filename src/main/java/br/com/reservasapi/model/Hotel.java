@@ -2,12 +2,14 @@ package br.com.reservasapi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "hotel")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Hotel {
 
     @Id
