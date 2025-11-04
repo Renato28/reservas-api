@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.QuartoDto;
+import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.QuartoMapper;
 import br.com.reservasapi.model.Quarto;
 import br.com.reservasapi.repositories.QuartoRepository;
@@ -26,7 +27,7 @@ public class QuartoService {
 
     public QuartoDto buscarPorId(Long id) {
         Quarto quarto = quartoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Quarto não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado"));
         return quartoMapper.toDto(quarto);
     }
 
@@ -37,7 +38,7 @@ public class QuartoService {
 
     public QuartoDto atualizar(Long id, QuartoDto dto) {
         Quarto quartoExistente = quartoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Quarto não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado"));
         quartoExistente.setNumero(dto.getNumero());
         quartoExistente.setTipo(dto.getTipo());
         quartoExistente.setPrecoDiaria(dto.getPrecoDiaria());

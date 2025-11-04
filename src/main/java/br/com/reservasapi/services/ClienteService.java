@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.ClienteDto;
+import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.ClienteMapper;
 import br.com.reservasapi.model.Cliente;
 import br.com.reservasapi.repositories.ClienteRepository;
@@ -26,7 +27,7 @@ public class ClienteService {
 
     public ClienteDto buscarPorId(Long id) {
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
         return clienteMapper.toDto(cliente);
     }
 
@@ -37,7 +38,7 @@ public class ClienteService {
 
     public ClienteDto atualizar(Long id, ClienteDto dto) {
         Cliente clienteExistente = clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
         clienteExistente.setNome(dto.getNome());
         clienteExistente.setEmail(dto.getEmail());
         clienteExistente.setTelefone(dto.getTelefone());

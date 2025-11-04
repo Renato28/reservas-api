@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.ReservaDto;
+import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.ReservaMapper;
 import br.com.reservasapi.model.Reserva;
 import br.com.reservasapi.repositories.ReservaRepository;
@@ -26,7 +27,7 @@ public class ReservaService {
 
     public ReservaDto buscarPorId(Long id) {
         Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reserva não encontrada!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
         return reservaMapper.toDto(reserva);
     }
 
@@ -37,7 +38,7 @@ public class ReservaService {
 
     public ReservaDto atualizar(Long id, ReservaDto reservaDto) {
         Reserva reservaExistente = reservaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reserva não encontrada!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
         reservaExistente.setDataCheckIn(reservaDto.getDataCheckIn());
         reservaExistente.setDataCheckOut(reservaDto.getDataCheckOut());
         reservaExistente.setValorTotal(reservaDto.getValorTotal());

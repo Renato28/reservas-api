@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.HotelDto;
+import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.HotelMapper;
 import br.com.reservasapi.model.Hotel;
 import br.com.reservasapi.repositories.HotelRepository;
@@ -26,7 +27,7 @@ public class HotelService {
 
     public HotelDto buscarPorId(Long id) {
         Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hotel não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel não encontrado"));
         return hotelMapper.toDto(hotel);
     }
 
@@ -37,7 +38,7 @@ public class HotelService {
 
     public HotelDto atualizar(Long id, HotelDto dto) {
         Hotel hotelExistente = hotelRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hotel não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel não encontrado"));
         hotelExistente.setNome(dto.getNome());
         hotelExistente.setEndereco(dto.getEndereco());
         hotelExistente.setCidade(dto.getCidade());
