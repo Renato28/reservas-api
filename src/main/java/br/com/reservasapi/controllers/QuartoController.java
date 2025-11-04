@@ -2,6 +2,7 @@ package br.com.reservasapi.controllers;
 
 import br.com.reservasapi.dto.QuartoDto;
 import br.com.reservasapi.services.QuartoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class QuartoController {
     }
 
     @PostMapping
-    public ResponseEntity<QuartoDto> salvar(@RequestBody QuartoDto dto) {
+    public ResponseEntity<QuartoDto> salvar(@Valid @RequestBody QuartoDto dto) {
         return ResponseEntity.ok(quartoService.salvar(dto));
     }
 

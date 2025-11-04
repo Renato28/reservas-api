@@ -2,6 +2,7 @@ package br.com.reservasapi.controllers;
 
 import br.com.reservasapi.dto.ClienteDto;
 import br.com.reservasapi.services.ClienteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDto> salvar(@RequestBody ClienteDto dto) {
+    public ResponseEntity<ClienteDto> salvar(@Valid @RequestBody ClienteDto dto) {
         return ResponseEntity.ok().body(clienteService.salvar(dto));
     }
 
