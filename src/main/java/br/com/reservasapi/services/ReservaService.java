@@ -30,7 +30,12 @@ public class ReservaService {
         return reservaMapper.toDto(reserva);
     }
 
-    public ReservaDto salvar(Long id, ReservaDto reservaDto) {
+    public ReservaDto salvar(ReservaDto dto) {
+        Reserva reserva = reservaMapper.toEntity(dto);
+        return reservaMapper.toDto(reservaRepository.save(reserva));
+    }
+
+    public ReservaDto atualizar(Long id, ReservaDto reservaDto) {
         Reserva reservaExistente = reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reserva não encontrada!"));
         reservaExistente.setDataCheckIn(reservaDto.getDataCheckIn());
