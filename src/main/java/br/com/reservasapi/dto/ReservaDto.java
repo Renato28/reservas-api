@@ -1,5 +1,6 @@
 package br.com.reservasapi.dto;
 
+import br.com.reservasapi.validation.ValidReservaDatas;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ValidReservaDatas
 public class ReservaDto {
 
     private Long id;
