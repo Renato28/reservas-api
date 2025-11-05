@@ -37,7 +37,7 @@ public class ReservaService {
         return reservaMapper.toDto(reserva);
     }
 
-    public ReservaDto salvar(ReservaDto dto) {
+    public ReservaDto cadastrar(ReservaDto dto) {
 
         var cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado!"));

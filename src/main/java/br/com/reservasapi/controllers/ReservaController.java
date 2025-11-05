@@ -4,6 +4,7 @@ import br.com.reservasapi.dto.ReservaDto;
 import br.com.reservasapi.services.ReservaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +34,14 @@ public class ReservaController {
 
     @PutMapping("{id}")
     public ResponseEntity<ReservaDto> atualizar(@PathVariable Long id, @RequestBody ReservaDto dto) {
-        return ResponseEntity.ok(reservaService.atualizar(id, dto));
+        ReservaDto reservaAtualizada = reservaService.atualizar(id, dto);
+        return ResponseEntity.ok(reservaAtualizada);
     }
 
     @PostMapping
-    public ResponseEntity<ReservaDto> salvar(@Valid @RequestBody ReservaDto dto) {
-        return  ResponseEntity.ok().body(reservaService.salvar(dto));
+    public ResponseEntity<ReservaDto> cadastrar(@Valid @RequestBody ReservaDto dto) {
+        ReservaDto novaReserva = reservaService.cadastrar(dto);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(novaReserva);
     }
 
     @PutMapping("/cancelar/{id}")
