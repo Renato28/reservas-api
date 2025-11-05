@@ -53,9 +53,8 @@ public class ReservaService {
             throw new IllegalArgumentException("A data de check-out deve ser posterior à data de check-in");
         }
 
-        boolean quartoDisponivel = reservaRepository.findByQuartoId(quarto.getId())
-                .stream().anyMatch(reserva -> (dto.getDataCheckIn().isBefore(reserva.getDataCheckOut())
-                        && dto.getDataCheckOut().isAfter(reserva.getDataCheckIn())));
+        boolean quartoDisponivel = reservaRepository.existeReservaNoPeriodo(
+                quarto.getId(), dto.getDataCheckIn(), dto.getDataCheckOut());
         if (quartoDisponivel) {
             throw new IllegalArgumentException("O quarto selecionado já está reservado nesse periodo");
         }
