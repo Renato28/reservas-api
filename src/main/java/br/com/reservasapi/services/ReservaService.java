@@ -77,11 +77,41 @@ public class ReservaService {
     public ReservaDto atualizar(Long id, ReservaDto reservaDto) {
         Reserva reservaExistente = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
+
+        var quarto = quartoRepository.findById(reservaDto.getQuartoId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado"));
+
+        boolean quartoIndisponivel = reservaRepository.existeReservaNoPeriodo(
+                quarto.getId(), reservaDto.getDataCheckIn(), reservaDto.getDataCheckOut());
+
+        if (quartoIndisponivel && !reservaExistente.getQuarto().getId().equals(reservaDto.getQuartoId())) {
+            throw new IllegalArgumentException("O quarto selecionado já está reservado nesse periodo");
+        }
+
         reservaExistente.setDataCheckIn(reservaDto.getDataCheckIn());
         reservaExistente.setDataCheckOut(reservaDto.getDataCheckOut());
         reservaExistente.setValorTotal(reservaDto.getValorTotal());
         reservaExistente.setStatus(reservaDto.getStatus());
+        reservaExistente.setQuarto(quarto);
+
+        long dias = ChronoUnit.DAYS.between(reservaDto.getDataCheckIn(), reservaDto.getDataCheckOut());
+        reservaExistente.setValorTotal(quarto.getPrecoDiaria().multiply(new BigDecimal(dias)));
+
         return  reservaMapper.toDto(reservaRepository.save(reservaExistente));
+    }
+
+    public void cancelar(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
+        reserva.setStatus("CANCELADA");
+        reservaRepository.save(reserva);
+    }
+    
+    public List<ReservaDto> listarPorCliente(Long clienteId) {
+        return reservaRepository.findByClienteId(clienteId)
+                .stream()
+                .map(reservaMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public void deletar(Long id) {
