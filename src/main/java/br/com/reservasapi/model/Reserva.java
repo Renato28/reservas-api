@@ -1,5 +1,6 @@
 package br.com.reservasapi.model;
 
+import br.com.reservasapi.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,8 +38,8 @@ public class Reserva {
     @Column(name = "valor_total", precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
-    @Column(length = 20)
-    private String status = "ATIVA";
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column(name = "data_criacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime dataCriacao = LocalDateTime.now();

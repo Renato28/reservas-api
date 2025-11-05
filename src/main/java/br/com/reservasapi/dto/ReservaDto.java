@@ -1,5 +1,6 @@
 package br.com.reservasapi.dto;
 
+import br.com.reservasapi.enums.Status;
 import br.com.reservasapi.validation.ValidReservaDatas;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +30,7 @@ public class ReservaDto {
     @FutureOrPresent(message = "A data de check-out deve ser hoje ou no futuro")
     private LocalDate dataCheckOut;
     private BigDecimal valorTotal;
-    private String status;
+    private Status status;
     private LocalDateTime dataCriacao;
 
 }

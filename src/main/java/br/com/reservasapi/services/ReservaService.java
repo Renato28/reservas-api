@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.ReservaDto;
+import br.com.reservasapi.enums.Status;
 import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.ReservaMapper;
 import br.com.reservasapi.model.Reserva;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,10 +68,11 @@ public class ReservaService {
         BigDecimal valorTotal = quarto.getPrecoDiaria().multiply(new BigDecimal(dias));
         dto.setValorTotal(valorTotal);
 
-        dto.setStatus("ATIVA");
         Reserva reserva = reservaMapper.toEntity(dto);
         reserva.setCliente(cliente);
         reserva.setQuarto(quarto);
+        reserva.setStatus(Status.PENDENTE);
+        reserva.setDataCriacao(LocalDateTime.now());
         Reserva reservaSalvo = reservaRepository.save(reserva);
         return reservaMapper.toDto(reservaSalvo);
     }
@@ -103,7 +106,7 @@ public class ReservaService {
     public void cancelar(Long id) {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
-        reserva.setStatus("CANCELADA");
+        reserva.setStatus(Status.CANCELADA);
         reservaRepository.save(reserva);
     }
     
