@@ -21,6 +21,11 @@ public class ReservaController {
         return ResponseEntity.ok().body(reservaService.listarTodas());
     }
 
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<List<ReservaDto>> listarPorCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok().body(reservaService.listarPorCliente(clienteId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ReservaDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok().body(reservaService.buscarPorId(id));
@@ -34,6 +39,12 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<ReservaDto> salvar(@Valid @RequestBody ReservaDto dto) {
         return  ResponseEntity.ok().body(reservaService.salvar(dto));
+    }
+
+    @PutMapping("/cancelar/{id}")
+    public ResponseEntity<Void> cancelar(@PathVariable Long id){
+        reservaService.cancelar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
