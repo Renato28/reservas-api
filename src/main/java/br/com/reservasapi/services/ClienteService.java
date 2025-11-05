@@ -31,7 +31,7 @@ public class ClienteService {
         return clienteMapper.toDto(cliente);
     }
 
-    public ClienteDto salvar(ClienteDto dto) {
+    public ClienteDto cadastrar(ClienteDto dto) {
         Cliente cliente = clienteMapper.toEntity(dto);
         return clienteMapper.toDto(clienteRepository.save(cliente));
     }
