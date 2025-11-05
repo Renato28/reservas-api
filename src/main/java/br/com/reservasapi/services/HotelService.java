@@ -31,7 +31,7 @@ public class HotelService {
         return hotelMapper.toDto(hotel);
     }
 
-    public HotelDto salvar(HotelDto dto) {
+    public HotelDto cadastrar(HotelDto dto) {
         Hotel hotel = hotelMapper.toEntity(dto);
         return hotelMapper.toDto(hotelRepository.save(hotel));
     }

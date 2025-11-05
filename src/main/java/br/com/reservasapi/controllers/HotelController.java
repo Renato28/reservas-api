@@ -4,6 +4,7 @@ import br.com.reservasapi.dto.HotelDto;
 import br.com.reservasapi.services.HotelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +28,15 @@ public class HotelController {
     }
 
     @PostMapping
-    public ResponseEntity<HotelDto> salvar(@Valid @RequestBody HotelDto dto) {
-        return ResponseEntity.ok(hotelService.salvar(dto));
+    public ResponseEntity<HotelDto> cadastrar(@Valid @RequestBody HotelDto dto) {
+        HotelDto hotelCriado = hotelService.cadastrar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(hotelCriado);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<HotelDto> atualizar(@PathVariable Long id, @RequestBody HotelDto dto) {
-        return ResponseEntity.ok(hotelService.atualizar(id, dto));
+        HotelDto hotelAtualizado = hotelService.atualizar(id, dto);
+        return ResponseEntity.ok(hotelAtualizado);
     }
 
     @DeleteMapping("/{id}")
