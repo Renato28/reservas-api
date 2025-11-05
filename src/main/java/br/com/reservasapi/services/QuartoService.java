@@ -31,7 +31,7 @@ public class QuartoService {
         return quartoMapper.toDto(quarto);
     }
 
-    public QuartoDto salvar(QuartoDto dto) {
+    public QuartoDto cadastrar(QuartoDto dto) {
         Quarto quarto = quartoMapper.toEntity(dto);
         return quartoMapper.toDto(quartoRepository.save(quarto));
     }
