@@ -50,6 +50,18 @@ public class ReservaController {
         return  ResponseEntity.status(HttpStatus.CREATED).body(novaReserva);
     }
 
+    @PutMapping("/check-in/{id}")
+    public ResponseEntity<Void> realizarCheckIn(@PathVariable Long id){
+        reservaService.realizarCheckIn(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/check-out/{id}")
+    public ResponseEntity<Void> realizarCheckOut(@PathVariable Long id){
+        reservaService.realizarCheckOut(id);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "Cancela uma reserva pelo ID", description = "Retorna o status 204 de reserva cancelada com sucesso")
     @PutMapping("/cancelar/{id}")
     public ResponseEntity<Void> cancelar(@PathVariable Long id){
