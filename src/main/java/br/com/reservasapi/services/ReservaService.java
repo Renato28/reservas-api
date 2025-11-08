@@ -1,9 +1,11 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.ReservaDto;
-import br.com.reservasapi.enums.Status;
+import br.com.reservasapi.enums.StatusQuarto;
+import br.com.reservasapi.enums.StatusReserva;
 import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.ReservaMapper;
+import br.com.reservasapi.model.Quarto;
 import br.com.reservasapi.model.Reserva;
 import br.com.reservasapi.repositories.ClienteRepository;
 import br.com.reservasapi.repositories.QuartoRepository;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -71,7 +75,7 @@ public class ReservaService {
         Reserva reserva = reservaMapper.toEntity(dto);
         reserva.setCliente(cliente);
         reserva.setQuarto(quarto);
-        reserva.setStatus(Status.PENDENTE);
+        reserva.setStatus(StatusReserva.PENDENTE);
         reserva.setDataCriacao(LocalDateTime.now());
         Reserva reservaSalvo = reservaRepository.save(reserva);
         return reservaMapper.toDto(reservaSalvo);
@@ -103,10 +107,86 @@ public class ReservaService {
         return  reservaMapper.toDto(reservaRepository.save(reservaExistente));
     }
 
+    public void realizarCheckIn(Long idReserva) {
+        Reserva reserva = reservaRepository.findById(idReserva)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
+
+        // Verifica se já foi feito o check-in
+        if (reserva.getStatus() == StatusReserva.EM_ANDAMENTO) {
+            throw new IllegalStateException("O check-in já foi realizado!");
+        }
+
+        // verifica se a reserva está confirmada
+        if (reserva.getStatus() == StatusReserva.CONFIRMADA) {
+            throw new IllegalStateException("Somente reservas confirmadas podem realizar check-in!");
+        }
+
+        // Verifica se a data atual é válida para check-in
+        LocalDate agora = LocalDate.now();
+        if (agora.isBefore(reserva.getDataCheckIn())) {
+            throw new IllegalStateException("Não é possivel realizar check-in antes da data prevista!");
+        }
+
+
+        // Atualiza status da reserva e data real de check-in
+        reserva.setStatus(StatusReserva.EM_ANDAMENTO);
+        reserva.setDataCheckIn(agora);
+
+        Quarto quarto = reserva.getQuarto();
+        quarto.setStatus(StatusQuarto.OCUPADO);
+
+        quartoRepository.save(quarto);
+        reservaRepository.save(reserva);
+    }
+
+    public void realizarCheckOut(Long idReserva) {
+        Reserva reserva = reservaRepository.findById(idReserva)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
+        if (reserva.getStatus() != StatusReserva.EM_ANDAMENTO) {
+            throw new IllegalStateException("Somente reservas em andamento pode realizar check-out!");
+        }
+
+        LocalDate agora = LocalDate.now();
+
+        if (agora.isBefore(reserva.getDataCheckIn())) {
+            throw new IllegalStateException("Não é possivel realizar check-out antes do check-in!");
+        }
+
+        reserva.setStatus(StatusReserva.CONCLUIDA);
+        reserva.setDataCheckOut(agora);
+
+        Quarto quarto = reserva.getQuarto();
+        quarto.setStatus(StatusQuarto.DISPONIVEL);
+
+        quartoRepository.save(quarto);
+        reservaRepository.save(reserva);
+    }
+
     public void cancelar(Long id) {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
-        reserva.setStatus(Status.CANCELADA);
+
+        // verifica se já está cancelada
+        if (reserva.getStatus() == StatusReserva.CANCELADA) {
+            throw new IllegalArgumentException("A reservas já foi cancelada anteriormente");
+        }
+
+        // verifica se já fez check-in (opcional, caso queira impedir cancelamento após entrada)
+        if (reserva.getStatus() == StatusReserva.EM_ANDAMENTO) {
+            throw new IllegalArgumentException("Não é possível cancelar uma reserva que já iniciou ou foi concluida");
+        }
+
+        // verifica a data de check-in e calcular diferença em horas
+        LocalDate agora = LocalDate.now();
+        LocalDate dataCheckIn = reserva.getDataCheckIn();
+
+        long diasRestantes = Duration.between(agora, dataCheckIn).toDays();
+
+        if (diasRestantes < 2) {
+            throw new IllegalArgumentException("A reserva só pode ser cancelada até dois dias antes da data do check-in");
+        }
+
+        reserva.setStatus(StatusReserva.CANCELADA);
         reservaRepository.save(reserva);
     }
     
