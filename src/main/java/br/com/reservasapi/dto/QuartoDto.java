@@ -1,5 +1,6 @@
 package br.com.reservasapi.dto;
 
+import br.com.reservasapi.enums.StatusQuarto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,6 +24,6 @@ public class QuartoDto {
     @NotNull(message = "O preço é obrigatório")
     @Positive(message = "O preço deve ser positivo")
     private BigDecimal precoDiaria;
-    private Boolean disponivel;
+    private StatusQuarto status;
     private Long hotelId;
 }

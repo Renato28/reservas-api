@@ -42,7 +42,7 @@ public class QuartoService {
         quartoExistente.setNumero(dto.getNumero());
         quartoExistente.setTipo(dto.getTipo());
         quartoExistente.setPrecoDiaria(dto.getPrecoDiaria());
-        quartoExistente.setDisponivel(dto.getDisponivel());
+        quartoExistente.setStatus(dto.getStatus());
         return quartoMapper.toDto(quartoRepository.save(quartoExistente));
     }
 

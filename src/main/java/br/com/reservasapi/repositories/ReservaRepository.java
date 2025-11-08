@@ -26,4 +26,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             @Param("dataCheckIn") LocalDate dataCheckIn,
             @Param("dataCheckOut") LocalDate dataCheckOut
     );
+
+    Long id(Long id);
 }

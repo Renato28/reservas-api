@@ -1,10 +1,9 @@
 package br.com.reservasapi.enums;
 
-public enum Status {
+public enum StatusReserva {
     PENDENTE,
+    EM_ANDAMENTO,
     CONFIRMADA,
-    CHECK_IN,
-    CHECK_OUT,
+    CONCLUIDA,
     CANCELADA,
-    NO_SHOW
 }

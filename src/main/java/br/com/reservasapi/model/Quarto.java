@@ -1,5 +1,6 @@
 package br.com.reservasapi.model;
 
+import br.com.reservasapi.enums.StatusQuarto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class Quarto {
     private BigDecimal precoDiaria;
 
     @Column(nullable = false)
-    private Boolean disponivel;
+    private StatusQuarto status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id", nullable = false, foreignKey = @ForeignKey(name = "fk_quarto_hotel"))

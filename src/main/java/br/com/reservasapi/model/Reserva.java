@@ -1,6 +1,6 @@
 package br.com.reservasapi.model;
 
-import br.com.reservasapi.enums.Status;
+import br.com.reservasapi.enums.StatusReserva;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +39,7 @@ public class Reserva {
     private BigDecimal valorTotal;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private StatusReserva status;
 
     @Column(name = "data_criacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime dataCriacao = LocalDateTime.now();
