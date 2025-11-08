@@ -13,13 +13,18 @@ CREATE TABLE hotel (
     telefone VARCHAR(30)
 );
 
+CREATE TYPE status_quarto AS ENUM (
+    'DISPONIVEL',
+    'OCUPADO'
+);
+
 -- Tabela QUARTO
 CREATE TABLE quarto (
     id BIGSERIAL PRIMARY KEY,
     numero VARCHAR(20) NOT NULL,
     tipo VARCHAR(50),
     preco_diaria NUMERIC(10,2) NOT NULL,
-    disponivel BOOLEAN DEFAULT TRUE,
+    status status_quarto DEFAULT 'DISPONIVEL',
     hotel_id BIGINT NOT NULL,
     CONSTRAINT fk_quarto_hotel FOREIGN KEY (hotel_id) REFERENCES hotel(id) ON DELETE CASCADE
 );
@@ -33,6 +38,13 @@ CREATE TABLE cliente (
     documento VARCHAR(20) UNIQUE
 );
 
+CREATE TYPE status_reserva AS ENUM (
+    'PENDENTE',
+    'EM_ANDAMENTO',
+    'CONFIRMADA',
+    'CANCELADA'
+);
+
 -- Tabela: RESERVA
 CREATE TABLE reserva (
     id BIGSERIAL PRIMARY KEY,
@@ -41,10 +53,20 @@ CREATE TABLE reserva (
     data_check_in DATE NOT NULL,
     data_check_out DATE NOT NULL,
     valor_total NUMERIC(10,2),
-    status VARCHAR(20) DEFAULT 'ATIVA',
+    status status_reserva DEFAULT 'PENDENTE',
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_reserva_cliente FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE,
     CONSTRAINT fk_reserva_quarto FOREIGN KEY (quarto_id) REFERENCES quarto(id) ON DELETE CASCADE
+);
+
+CREATE TABLE usuario (
+    id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Índices para otimização de consultas
