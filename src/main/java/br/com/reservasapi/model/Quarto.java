@@ -29,6 +29,7 @@ public class Quarto {
     private BigDecimal precoDiaria;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusQuarto status;
 
     @ManyToOne(fetch = FetchType.LAZY)
