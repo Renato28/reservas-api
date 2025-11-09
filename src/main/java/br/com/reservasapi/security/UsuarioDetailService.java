@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService {
+public class UsuarioDetailService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
 
@@ -21,10 +21,6 @@ public class CustomUserDetailService implements UserDetailsService {
         Usuario usuario = usuarioRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        return User.builder()
-                .username(usuario.getEmail())
-                .password(usuario.getSenha())
-                .authorities(usuario.getRole())
-                .build();
+        return new UsuarioPrincipal(usuario);
     }
 }
