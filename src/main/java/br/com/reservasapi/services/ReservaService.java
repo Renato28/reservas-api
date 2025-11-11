@@ -189,6 +189,12 @@ public class ReservaService {
         reserva.setStatus(StatusReserva.CANCELADA);
         reservaRepository.save(reserva);
     }
+
+    public String consultarStatus(Long id) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
+        return reserva.getStatus().name();
+    }
     
     public List<ReservaDto> listarPorCliente(Long clienteId) {
         return reservaRepository.findByClienteId(clienteId)
