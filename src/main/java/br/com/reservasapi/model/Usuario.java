@@ -1,12 +1,12 @@
 package br.com.reservasapi.model;
 
+import br.com.reservasapi.enums.Perfil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,8 +27,9 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Column
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private Perfil perfil;
 
     @Column(nullable = false)
     private Boolean ativo;

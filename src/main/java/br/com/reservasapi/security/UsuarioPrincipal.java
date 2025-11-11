@@ -1,6 +1,7 @@
 package br.com.reservasapi.security;
 
 import br.com.reservasapi.model.Usuario;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 @RequiredArgsConstructor
 public class UsuarioPrincipal implements UserDetails {
 
@@ -16,11 +18,7 @@ public class UsuarioPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
+        return List.of(new SimpleGrantedAuthority(usuario.getPerfil().name()));
     }
 
     @Override
@@ -50,6 +48,6 @@ public class UsuarioPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return usuario.getAtivo();
     }
 }
