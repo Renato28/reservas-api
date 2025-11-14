@@ -20,7 +20,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthService authService;
-    private UsuarioDetailService usuarioDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -33,12 +32,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String email = authService.validarToken(token);
 
                 Usuario usuario = authService.getUsuarioPorEmail(email);
-                UsuarioPrincipal principal = new UsuarioPrincipal(usuario);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                if (usuario != null && usuario.getAtivo()) {
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    UsuarioPrincipal principal = new  UsuarioPrincipal(usuario);
+
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    principal,
+                                    null,
+                                    principal.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
             } catch (JwtException e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token inválido");
