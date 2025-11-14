@@ -31,6 +31,12 @@ public class ClienteService {
         return clienteMapper.toDto(cliente);
     }
 
+    public ClienteDto buscarPorNome(String nome) {
+        Cliente cliente = clienteRepository.findByNome(nome)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+        return clienteMapper.toDto(cliente);
+    }
+
     public ClienteDto cadastrar(ClienteDto dto) {
         Cliente cliente = clienteMapper.toEntity(dto);
         return clienteMapper.toDto(clienteRepository.save(cliente));
@@ -49,4 +55,5 @@ public class ClienteService {
     public void deletar(Long id) {
         clienteRepository.deleteById(id);
     }
+
 }
