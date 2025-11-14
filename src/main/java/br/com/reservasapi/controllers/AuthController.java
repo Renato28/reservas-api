@@ -23,12 +23,12 @@ public class AuthController {
     private final UsuarioRepository usuarioRepository;
 
     @PostMapping("/login")
-    @Operation(summary = "Login de usuario", description = "Retorna o token e role do usuario logado")
+    @Operation(summary = "Login de usuario", description = "Retorna o token e perfil do usuario logado")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws Exception {
         var usuario = authService.autenticar(request.getUsername(), request.getPassword());
 
         String token = authService.gerarToken(usuario);
 
-        return ResponseEntity.ok(new LoginResponse(token, usuario.getRole()));
+        return ResponseEntity.ok(new LoginResponse(token, usuario.getPerfil().name()));
     }
 }

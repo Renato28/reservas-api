@@ -24,7 +24,7 @@ public class UsuarioService {
         Usuario usuario = Usuario.builder()
                 .email(dto.getEmail())
                 .senha(passwordEncoder.encode(dto.getSenha()))
-                .role(dto.getRole())
+                .perfil(dto.getPerfil())
                 .ativo(true)
                 .dataCriacao(LocalDateTime.now())
                 .build();

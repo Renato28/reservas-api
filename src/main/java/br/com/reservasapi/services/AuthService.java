@@ -38,7 +38,7 @@ public class AuthService {
                 .issuedAt(now)
                 .expiresAt(now.plus(2, ChronoUnit.HOURS))
                 .subject(usuario.getEmail())
-                .claim("role", usuario.getRole())
+                .claim("role", usuario.getPerfil())
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }

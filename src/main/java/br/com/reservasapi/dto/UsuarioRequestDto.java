@@ -1,5 +1,6 @@
 package br.com.reservasapi.dto;
 
+import br.com.reservasapi.enums.Perfil;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,5 @@ public class UsuarioRequestDto {
     @NotBlank(message = "A senha do usuário é obrigatória")
     private String senha;
     @NotBlank(message = "O perfil do usuário é obrigatória")
-    private String role;
+    private Perfil perfil;
 }
