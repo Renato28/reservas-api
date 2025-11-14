@@ -32,12 +32,19 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
+    @GetMapping("/{nome}")
+    @Operation(summary = "Busca um cliente pelo nome", description = "Retorna o cliente pelo nome informado")
+    public ResponseEntity<ClienteDto> buscarPorNome(@PathVariable String nome) {
+        return ResponseEntity.ok(clienteService.buscarPorNome(nome));
+    }
+
     @Operation(summary = "Cadastra um novo cliente", description = "Retorna os dados do cliente cadastrado")
     @PostMapping
     public ResponseEntity<ClienteDto> cadastrar(@Valid @RequestBody ClienteDto dto) {
         ClienteDto clienteCriado = clienteService.cadastrar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteCriado);
     }
+
 
     @Operation(summary = "Atualiza os dados de um cliente cadastrado pelo ID", description = "Retorna o status OK de cliente atualizado com sucesso")
     @PutMapping("/{id}")
