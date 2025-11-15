@@ -77,11 +77,18 @@ public class ReservaController {
     }
 
     @Operation(summary = "Cancela uma reserva pelo ID", description = "Retorna o status 204 de reserva cancelada com sucesso")
-    @PutMapping("/cancelar/{id}")
+    @PatchMapping("/cancelar/{id}")
     @PreAuthorize("hasAnyRole('GERENTE', 'RECEPCIONISTA')")
     public ResponseEntity<Void> cancelar(@PathVariable Long id){
         reservaService.cancelar(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @Operation(summary = "Confirma uma reserva pelo ID", description = "Retorna os dados da reserva confirmada")
+    @PatchMapping("/confirmar/{id}")
+    public ResponseEntity<ReservaDto> confirmarReserva(@PathVariable Long id){
+        var reserva = reservaService.confirmarReserva(id);
+        return ResponseEntity.ok().body(reserva);
     }
 
     @Operation(summary = "Consulta o status da reserva", description = "Retorna o status da reserva")

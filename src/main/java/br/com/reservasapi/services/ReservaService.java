@@ -190,6 +190,22 @@ public class ReservaService {
         reservaRepository.save(reserva);
     }
 
+    public ReservaDto confirmarReserva(Long reservaId) {
+
+        var reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
+
+        if (reserva.getStatus() != StatusReserva.PENDENTE) {
+            throw new IllegalArgumentException("Somente reservas pendentes podem ser confirmadas");
+        }
+
+        reserva.setStatus(StatusReserva.CONFIRMADA);
+
+        var reservaSalva = reservaRepository.save(reserva);
+
+        return reservaMapper.toDto(reservaSalva);
+    }
+
     public String consultarStatus(Long id) {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
