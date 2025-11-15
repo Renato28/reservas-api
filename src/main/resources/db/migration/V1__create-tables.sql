@@ -5,7 +5,7 @@
 
 -- Tabela HOTEL
 CREATE TABLE hotel (
-    id BIGSERIAL AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     endereco VARCHAR(255),
     cidade VARCHAR(100),
@@ -21,7 +21,7 @@ CREATE TYPE status_quarto AS ENUM (
 
 -- Tabela QUARTO
 CREATE TABLE quarto (
-    id BIGSERIAL AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     numero VARCHAR(20) NOT NULL,
     tipo VARCHAR(50),
     preco_diaria NUMERIC(10,2) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE quarto (
 
 -- Tabela: CLIENTE
 CREATE TABLE cliente (
-    id BIGSERIAL AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL ,
     email VARCHAR(150) UNIQUE NOT NULL,
     telefone VARCHAR(30),
@@ -41,14 +41,15 @@ CREATE TABLE cliente (
 
 CREATE TYPE status_reserva AS ENUM (
     'PENDENTE',
-    'EM_ANDAMENTO',
+    'CHECK_IN',
+    'CHECK_OUT'
     'CONFIRMADA',
     'CANCELADA'
 );
 
 -- Tabela: RESERVA
 CREATE TABLE reserva (
-    id BIGSERIAL AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     cliente_id BIGSERIAL NOT NULL,
     quarto_id BIGSERIAL NOT NULL,
     data_check_in DATE NOT NULL,
@@ -61,7 +62,7 @@ CREATE TABLE reserva (
 );
 
 CREATE TABLE usuario (
-    id BIGSERIAL AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     email VARCHAR(150) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
     perfil VARCHAR(50) NOT NULL,
@@ -70,7 +71,7 @@ CREATE TABLE usuario (
 );
 
 CREATE TABLE hospede_reserva (
-    id BIGSERIAL AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     documento VARCHAR(20),
     reserva_id BIGSERIAL NOT NULL,

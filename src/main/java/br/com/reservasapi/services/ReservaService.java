@@ -112,7 +112,7 @@ public class ReservaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
         // Verifica se já foi feito o check-in
-        if (reserva.getStatus() == StatusReserva.EM_ANDAMENTO) {
+        if (reserva.getStatus() == StatusReserva.CHECK_IN) {
             throw new IllegalStateException("O check-in já foi realizado!");
         }
 
@@ -129,7 +129,7 @@ public class ReservaService {
 
 
         // Atualiza status da reserva e data real de check-in
-        reserva.setStatus(StatusReserva.EM_ANDAMENTO);
+        reserva.setStatus(StatusReserva.CHECK_IN);
         reserva.setDataCheckIn(agora);
 
         Quarto quarto = reserva.getQuarto();
@@ -142,7 +142,7 @@ public class ReservaService {
     public void realizarCheckOut(Long idReserva) {
         Reserva reserva = reservaRepository.findById(idReserva)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
-        if (reserva.getStatus() != StatusReserva.EM_ANDAMENTO) {
+        if (reserva.getStatus() != StatusReserva.CHECK_OUT) {
             throw new IllegalStateException("Somente reservas em andamento pode realizar check-out!");
         }
 
@@ -152,7 +152,7 @@ public class ReservaService {
             throw new IllegalStateException("Não é possivel realizar check-out antes do check-in!");
         }
 
-        reserva.setStatus(StatusReserva.CONCLUIDA);
+        reserva.setStatus(StatusReserva.CHECK_OUT);
         reserva.setDataCheckOut(agora);
 
         Quarto quarto = reserva.getQuarto();
@@ -172,7 +172,7 @@ public class ReservaService {
         }
 
         // verifica se já fez check-in (opcional, caso queira impedir cancelamento após entrada)
-        if (reserva.getStatus() == StatusReserva.EM_ANDAMENTO) {
+        if (reserva.getStatus() == StatusReserva.CHECK_IN) {
             throw new IllegalArgumentException("Não é possível cancelar uma reserva que já iniciou ou foi concluida");
         }
 
