@@ -20,6 +20,10 @@ public class AdminUserInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         String adminEmail = "admin@hotel.com";
+        String gerenteEmail = "gerente@hotel.com";
+        String recepcionistaEmail = "recepcionista@hotel.com";
+        String camareiraEmail = "camareira@hotel.com";
+        String hospedeEmail = "hospede@gmail.com";
 
         if (usuarioRepository.findByEmail(adminEmail).isEmpty()) {
             Usuario admin = Usuario.builder()
@@ -30,6 +34,42 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .dataCriacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(admin);
+
+            Usuario gerente = Usuario.builder()
+                    .email(gerenteEmail)
+                    .senha(passwordEncoder.encode("gerente123"))
+                    .perfil(Perfil.GERENTE)
+                    .ativo(true)
+                    .dataCriacao(LocalDateTime.now())
+                    .build();
+            usuarioRepository.save(gerente);
+
+            Usuario recepcionista = Usuario.builder()
+                    .email(recepcionistaEmail)
+                    .senha(passwordEncoder.encode("recepcionista123"))
+                    .perfil(Perfil.RECEPCIONISTA)
+                    .ativo(true)
+                    .dataCriacao(LocalDateTime.now())
+                    .build();
+            usuarioRepository.save(recepcionista);
+
+            Usuario camareira = Usuario.builder()
+                    .email(camareiraEmail)
+                    .senha(passwordEncoder.encode("camareira123"))
+                    .perfil(Perfil.CAMAREIRA)
+                    .ativo(true)
+                    .dataCriacao(LocalDateTime.now())
+                    .build();
+            usuarioRepository.save(camareira);
+
+            Usuario hospede = Usuario.builder()
+                    .email(hospedeEmail)
+                    .senha(passwordEncoder.encode("hospede123"))
+                    .perfil(Perfil.HOSPEDE)
+                    .ativo(true)
+                    .dataCriacao(LocalDateTime.now())
+                    .build();
+            usuarioRepository.save(hospede);
 
             System.out.println("Usuário ADMIN criado: " + adminEmail);
         } else {
