@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +43,14 @@ public class QuartoController {
     public ResponseEntity<QuartoDto> cadastrar(@Valid @RequestBody QuartoDto dto) {
         QuartoDto quartoCriado = quartoService.cadastrar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(quartoCriado);
+    }
+
+    @Operation(summary = "Consulta o status do quarto", description = "Retorna o status do quarto")
+    @GetMapping("/status/{id}")
+    @PreAuthorize("hasAnyRole('ADMIM', 'GERENTE', 'RECEPCIONISTA')")
+    public ResponseEntity<String> consultarStatus(@PathVariable Long id) {
+        String status = quartoService.consultarStatus(id);
+        return ResponseEntity.ok().body(status);
     }
 
     @Operation(summary = "Deleta os dados de um quarto cadastrado pelo ID", description = "Retorna o status 204 de quarto deletado com sucesso")

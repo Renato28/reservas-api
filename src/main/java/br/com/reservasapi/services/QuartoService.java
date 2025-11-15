@@ -36,6 +36,12 @@ public class QuartoService {
         return quartoMapper.toDto(quartoRepository.save(quarto));
     }
 
+    public String consultarStatus(Long id) {
+        Quarto quarto = quartoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado!"));
+        return quarto.getStatus().name();
+    }
+
     public QuartoDto atualizar(Long id, QuartoDto dto) {
         Quarto quartoExistente = quartoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado"));
