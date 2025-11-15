@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+
 @Configuration
 @RequiredArgsConstructor
 public class AdminUserInitializer implements CommandLineRunner {
@@ -25,6 +27,7 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .senha(passwordEncoder.encode("admin123"))
                     .perfil(Perfil.ADMIN)
                     .ativo(true)
+                    .dataCriacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(admin);
 
