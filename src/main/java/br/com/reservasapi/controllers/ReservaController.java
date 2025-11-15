@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -96,5 +98,17 @@ public class ReservaController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         reservaService.deletar(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/disponibilidade")
+    public ResponseEntity<?> verificarDisponibilidade(
+            @RequestParam Long quartoId,
+            @RequestParam LocalDate checkIn,
+            @RequestParam LocalDate checkOut){
+
+     boolean disponivel = reservaService.verificarDisponibilidade(quartoId, checkIn, checkOut);
+
+     return ResponseEntity.ok(Collections.singletonMap("disponivel", disponivel));
+
     }
 }

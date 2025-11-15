@@ -206,4 +206,22 @@ public class ReservaService {
     public void deletar(Long id) {
         reservaRepository.deleteById(id);
     }
+
+    public boolean verificarDisponibilidade(Long quartoId, LocalDate dataCheckIn, LocalDate dataCheckOut) {
+
+        if (dataCheckIn == null || dataCheckOut == null) {
+            throw new IllegalArgumentException("As datas de check-in e check-out são obrigatórias");
+        }
+
+        if (!dataCheckOut.isAfter(dataCheckIn)) {
+            throw new IllegalArgumentException("A data de check-out deve ser posterior à data de check-in");
+        }
+
+        quartoRepository.findById(quartoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado!"));
+
+        boolean existeReserva = reservaRepository.existeReservaNoPeriodo(quartoId, dataCheckIn, dataCheckOut);
+        
+        return !existeReserva;
+    }
 }
