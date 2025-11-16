@@ -27,6 +27,7 @@ public class AdminUserInitializer implements CommandLineRunner {
 
         if (usuarioRepository.findByEmail(adminEmail).isEmpty()) {
             Usuario admin = Usuario.builder()
+                    .nome("Renato Nóbrega")
                     .email(adminEmail)
                     .senha(passwordEncoder.encode("admin123"))
                     .perfil(Perfil.ADMIN)
@@ -36,6 +37,7 @@ public class AdminUserInitializer implements CommandLineRunner {
             usuarioRepository.save(admin);
 
             Usuario gerente = Usuario.builder()
+                    .nome("Pedro Souza")
                     .email(gerenteEmail)
                     .senha(passwordEncoder.encode("gerente123"))
                     .perfil(Perfil.GERENTE)
@@ -45,6 +47,7 @@ public class AdminUserInitializer implements CommandLineRunner {
             usuarioRepository.save(gerente);
 
             Usuario recepcionista = Usuario.builder()
+                    .nome("Eduarda Costa")
                     .email(recepcionistaEmail)
                     .senha(passwordEncoder.encode("recepcionista123"))
                     .perfil(Perfil.RECEPCIONISTA)
@@ -54,6 +57,7 @@ public class AdminUserInitializer implements CommandLineRunner {
             usuarioRepository.save(recepcionista);
 
             Usuario camareira = Usuario.builder()
+                    .nome("Maria da Silva")
                     .email(camareiraEmail)
                     .senha(passwordEncoder.encode("camareira123"))
                     .perfil(Perfil.CAMAREIRA)
@@ -63,6 +67,7 @@ public class AdminUserInitializer implements CommandLineRunner {
             usuarioRepository.save(camareira);
 
             Usuario hospede = Usuario.builder()
+                    .nome("João da Silva")
                     .email(hospedeEmail)
                     .senha(passwordEncoder.encode("hospede123"))
                     .perfil(Perfil.HOSPEDE)
