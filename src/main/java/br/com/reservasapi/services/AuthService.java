@@ -1,14 +1,11 @@
 package br.com.reservasapi.services;
 
+import br.com.reservasapi.dto.RegistroUsuarioRequest;
 import br.com.reservasapi.model.Usuario;
 import br.com.reservasapi.repositories.UsuarioRepository;
-import br.com.reservasapi.security.UsuarioPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +16,26 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public Usuario autenticar(String username, String password) throws Exception {
-        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        UsuarioPrincipal principal = (UsuarioPrincipal) authentication.getPrincipal();
-        return principal.getUsuario();
+    public Usuario autenticar(Usuario usuario) {
+        return usuario;
+    }
+
+    public Usuario registrar(RegistroUsuarioRequest request) {
+        if (usuarioRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email já está em uso");
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(request.getNome());
+        usuario.setEmail(request.getEmail());
+        usuario.setSenha(passwordEncoder.encode(request.getSenha()));
+
+        return usuarioRepository.save(usuario);
     }
 
     public String gerarToken(Usuario usuario) {
@@ -40,6 +47,7 @@ public class AuthService {
                 .subject(usuario.getEmail())
                 .claim("role", usuario.getPerfil())
                 .build();
+
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
@@ -52,5 +60,4 @@ public class AuthService {
         return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
-
 }
