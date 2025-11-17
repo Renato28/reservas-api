@@ -3,6 +3,7 @@ package br.com.reservasapi.services;
 import br.com.reservasapi.dto.ReservaDto;
 import br.com.reservasapi.enums.StatusQuarto;
 import br.com.reservasapi.enums.StatusReserva;
+import br.com.reservasapi.exceptions.RegraDeNegocioException;
 import br.com.reservasapi.exceptions.ResourceNotFoundException;
 import br.com.reservasapi.mapper.ReservaMapper;
 import br.com.reservasapi.model.Quarto;
@@ -52,22 +53,22 @@ public class ReservaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado"));
 
         if (dto.getDataCheckIn() == null || dto.getDataCheckOut() == null) {
-            throw new IllegalArgumentException("As datas de check-in e check-out são obrigatórias");
+            throw new RegraDeNegocioException("As datas de check-in e check-out são obrigatórias");
         }
 
         if (!dto.getDataCheckOut().isAfter(dto.getDataCheckIn())) {
-            throw new IllegalArgumentException("A data de check-out deve ser posterior à data de check-in");
+            throw new RegraDeNegocioException("A data de check-out deve ser posterior à data de check-in");
         }
 
         boolean quartoDisponivel = reservaRepository.existeReservaNoPeriodo(
                 quarto.getId(), dto.getDataCheckIn(), dto.getDataCheckOut());
         if (quartoDisponivel) {
-            throw new IllegalArgumentException("O quarto selecionado já está reservado nesse periodo");
+            throw new RegraDeNegocioException("O quarto selecionado já está reservado nesse periodo");
         }
 
         long dias = ChronoUnit.DAYS.between(dto.getDataCheckIn(), dto.getDataCheckOut());
         if (dias <= 0) {
-            throw new IllegalArgumentException("A reserva deve ser no minimo 1 dia de duração");
+            throw new RegraDeNegocioException("A reserva deve ser no minimo 1 dia de duração");
         }
         BigDecimal valorTotal = quarto.getPrecoDiaria().multiply(new BigDecimal(dias));
         dto.setValorTotal(valorTotal);
@@ -92,7 +93,7 @@ public class ReservaService {
                 quarto.getId(), reservaDto.getDataCheckIn(), reservaDto.getDataCheckOut());
 
         if (quartoIndisponivel && !reservaExistente.getQuarto().getId().equals(reservaDto.getQuartoId())) {
-            throw new IllegalArgumentException("O quarto selecionado já está reservado nesse periodo");
+            throw new RegraDeNegocioException("O quarto selecionado já está reservado nesse periodo");
         }
 
         reservaExistente.setDataCheckIn(reservaDto.getDataCheckIn());
@@ -113,18 +114,18 @@ public class ReservaService {
 
         // Verifica se já foi feito o check-in
         if (reserva.getStatus() == StatusReserva.CHECK_IN) {
-            throw new IllegalStateException("O check-in já foi realizado!");
+            throw new RegraDeNegocioException("O check-in já foi realizado!");
         }
 
         // verifica se a reserva está confirmada
         if (reserva.getStatus() == StatusReserva.CONFIRMADA) {
-            throw new IllegalStateException("Somente reservas confirmadas podem realizar check-in!");
+            throw new RegraDeNegocioException("Somente reservas confirmadas podem realizar check-in!");
         }
 
         // Verifica se a data atual é válida para check-in
         LocalDate agora = LocalDate.now();
         if (agora.isBefore(reserva.getDataCheckIn())) {
-            throw new IllegalStateException("Não é possivel realizar check-in antes da data prevista!");
+            throw new RegraDeNegocioException("Não é possivel realizar check-in antes da data prevista!");
         }
 
 
@@ -143,13 +144,13 @@ public class ReservaService {
         Reserva reserva = reservaRepository.findById(idReserva)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
         if (reserva.getStatus() != StatusReserva.CHECK_OUT) {
-            throw new IllegalStateException("Somente reservas em andamento pode realizar check-out!");
+            throw new RegraDeNegocioException("Somente reservas em andamento pode realizar check-out!");
         }
 
         LocalDate agora = LocalDate.now();
 
         if (agora.isBefore(reserva.getDataCheckIn())) {
-            throw new IllegalStateException("Não é possivel realizar check-out antes do check-in!");
+            throw new RegraDeNegocioException("Não é possivel realizar check-out antes do check-in!");
         }
 
         reserva.setStatus(StatusReserva.CHECK_OUT);
@@ -168,12 +169,12 @@ public class ReservaService {
 
         // verifica se já está cancelada
         if (reserva.getStatus() == StatusReserva.CANCELADA) {
-            throw new IllegalArgumentException("A reservas já foi cancelada anteriormente");
+            throw new RegraDeNegocioException("A reserva já foi cancelada anteriormente");
         }
 
         // verifica se já fez check-in (opcional, caso queira impedir cancelamento após entrada)
         if (reserva.getStatus() == StatusReserva.CHECK_IN) {
-            throw new IllegalArgumentException("Não é possível cancelar uma reserva que já iniciou ou foi concluida");
+            throw new RegraDeNegocioException("Não é possível cancelar uma reserva que já iniciou ou foi concluida");
         }
 
         // verifica a data de check-in e calcular diferença em horas
@@ -183,7 +184,7 @@ public class ReservaService {
         long diasRestantes = Duration.between(agora, dataCheckIn).toDays();
 
         if (diasRestantes < 2) {
-            throw new IllegalArgumentException("A reserva só pode ser cancelada até dois dias antes da data do check-in");
+            throw new RegraDeNegocioException("A reserva só pode ser cancelada até dois dias antes da data do check-in");
         }
 
         reserva.setStatus(StatusReserva.CANCELADA);
@@ -196,7 +197,7 @@ public class ReservaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
 
         if (reserva.getStatus() != StatusReserva.PENDENTE) {
-            throw new IllegalArgumentException("Somente reservas pendentes podem ser confirmadas");
+            throw new RegraDeNegocioException("Somente reservas pendentes podem ser confirmadas");
         }
 
         reserva.setStatus(StatusReserva.CONFIRMADA);
@@ -226,11 +227,11 @@ public class ReservaService {
     public boolean verificarDisponibilidade(Long quartoId, LocalDate dataCheckIn, LocalDate dataCheckOut) {
 
         if (dataCheckIn == null || dataCheckOut == null) {
-            throw new IllegalArgumentException("As datas de check-in e check-out são obrigatórias");
+            throw new RegraDeNegocioException("As datas de check-in e check-out são obrigatórias");
         }
 
         if (!dataCheckOut.isAfter(dataCheckIn)) {
-            throw new IllegalArgumentException("A data de check-out deve ser posterior à data de check-in");
+            throw new RegraDeNegocioException("A data de check-out deve ser posterior à data de check-in");
         }
 
         quartoRepository.findById(quartoId)
