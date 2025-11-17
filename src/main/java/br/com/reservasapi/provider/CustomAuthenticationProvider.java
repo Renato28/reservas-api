@@ -6,6 +6,7 @@ import br.com.reservasapi.security.UsuarioPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -31,6 +32,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         if (!passwordEncoder.matches(senha, usuario.getSenha())) {
             throw new BadCredentialsException("Credenciais inválidas");
+        }
+
+        if (usuario.getAtivo() == false) {
+            throw new DisabledException("Usuário inativo. Login bloqueado");
         }
 
         UsuarioPrincipal principal = new UsuarioPrincipal(usuario);
