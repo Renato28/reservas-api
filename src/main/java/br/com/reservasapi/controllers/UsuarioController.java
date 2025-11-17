@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -28,5 +25,21 @@ public class UsuarioController {
     public ResponseEntity<Usuario> cadastrar(@RequestBody UsuarioRequestDto dto){
         Usuario usuarioCriado = usuarioService.cadastrar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
+    }
+
+    @PutMapping("/ativar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Ativa usuários", description = "Retorna status 200 de usuario ativado")
+    public ResponseEntity<Void> ativar(@PathVariable Long id){
+        usuarioService.ativar(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Inativa usuários", description = "Retorna status 200 de usuario inativado")
+    @PutMapping("/inativar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> inativar(@PathVariable Long id){
+        usuarioService.inativar(id);
+        return ResponseEntity.ok().build();
     }
 }
