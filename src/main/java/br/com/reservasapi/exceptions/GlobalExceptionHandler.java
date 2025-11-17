@@ -3,7 +3,8 @@ package br.com.reservasapi.exceptions;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -41,23 +42,44 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
-    // Erros de validação
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationErrors(MethodArgumentNotValidException ex, WebRequest request) {
+    // Usuario não autorizado
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> badCredentialsException(BadCredentialsException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
-        Map<String, String> errors = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNAUTHORIZED.value());
+        body.put("error", "Violação de integridade de dados");
+        body.put("message", ex.getMessage());
+        body.put("path", request.getDescription(false));
 
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errors.put(error.getField(), error.getDefaultMessage());
-        });
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
+    // Erros de validação
+    @ExceptionHandler(RegraDeNegocioException.class)
+    public ResponseEntity<Object> handleValidationErrors(RegraDeNegocioException ex, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
 
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("error", "Erro de validação");
-        body.put("messages", errors);
+        body.put("message", ex.getMessage());
         body.put("path", request.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    // Usuario inativo
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<Object> handleDisabledException(DisabledException ex, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.FORBIDDEN.value());
+        body.put("error", "Usuário Inativo");
+        body.put("message", ex.getMessage());
+        body.put("path", request.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
     // Exceções genéricas
