@@ -82,6 +82,18 @@ CREATE TABLE hospede_reserva (
         ON DELETE CASCADE
 );
 
+CREATE TABLE password_reset_token (
+    id BIGSERIAL PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    expiration TIMESTAMP NOT NULL,
+    usuario_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_password_token_usuario
+        FOREIGN KEY (usuario_id)
+        REFERENCES usuario(id)
+        ON DELETE CASCADE
+);
+
 -- Índices para otimização de consultas
 CREATE INDEX idx_quarto_hotel ON quarto (hotel_id);
 CREATE INDEX idx_reserva_cliente ON reserva (cliente_id);
