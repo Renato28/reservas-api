@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.RegistroUsuarioRequest;
+import br.com.reservasapi.enums.Perfil;
 import br.com.reservasapi.model.Usuario;
 import br.com.reservasapi.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -33,6 +35,9 @@ public class AuthService {
         Usuario usuario = new Usuario();
         usuario.setNome(request.getNome());
         usuario.setEmail(request.getEmail());
+        usuario.setPerfil(Perfil.USER);
+        usuario.setAtivo(true);
+        usuario.setDataCriacao(LocalDateTime.now());
         usuario.setSenha(passwordEncoder.encode(request.getSenha()));
 
         return usuarioRepository.save(usuario);

@@ -41,6 +41,6 @@ public class AuthController {
     @Operation(summary = "Registra um novo usuário", description = "Retorna mensagem de usuario registrado com sucesso")
     public ResponseEntity<?> registrar(@RequestBody RegistroUsuarioRequest request) {
         Usuario usuario = authService.registrar(request);
-        return ResponseEntity.ok("Usuário registrado com sucesso" + usuario.getEmail());
+        return ResponseEntity.ok("Usuário registrado com sucesso");
     }
 }

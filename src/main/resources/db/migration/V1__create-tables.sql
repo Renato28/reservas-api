@@ -61,12 +61,21 @@ CREATE TABLE reserva (
     CONSTRAINT fk_reserva_quarto FOREIGN KEY (quarto_id) REFERENCES quarto(id) ON DELETE CASCADE
 );
 
+CREATE TYPE perfil AS ENUM (
+    'ADMIN',
+    'USER',
+    'GERENTE'
+    'RECEPCIONISTA',
+    'CAMAREIRA',
+    'HOSPEDE'
+);
+
 CREATE TABLE usuario (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    perfil VARCHAR(50) NOT NULL,
+    perfil perfil DEFAULT 'USER',
     ativo BOOLEAN DEFAULT TRUE,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
