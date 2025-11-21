@@ -1,6 +1,7 @@
 package br.com.reservasapi.controllers;
 
 import br.com.reservasapi.dto.ReservaDto;
+import br.com.reservasapi.dto.ReservaListagemDto;
 import br.com.reservasapi.services.ReservaService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -24,14 +25,14 @@ public class ReservaController {
     @Operation(summary = "Listar todas as reservas", description = "Retorna uma lista completa de reservas cadastradas")
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
-    public ResponseEntity<List<ReservaDto>> listarTodas() {
+    public ResponseEntity<List<ReservaListagemDto>> listarTodas() {
         return ResponseEntity.ok().body(reservaService.listarTodas());
     }
 
     @Operation(summary = "Lista as reservas pelo ID do cliente", description = "Retorna uma lista completa de reservas pelo cliente")
     @GetMapping("/{clienteId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
-    public ResponseEntity<List<ReservaDto>> listarPorCliente(@PathVariable Long clienteId) {
+    public ResponseEntity<List<ReservaListagemDto>> listarPorCliente(@PathVariable Long clienteId) {
         return ResponseEntity.ok().body(reservaService.listarPorCliente(clienteId));
     }
 
@@ -62,33 +63,33 @@ public class ReservaController {
     @Operation(summary = "Realiza o check-in da reserva", description = "Retorna status 200 de check-in realizado com sucesso")
     @PutMapping("/check-in/{id}")
     @PreAuthorize("hasRole('RECEPCIONISTA')")
-    public ResponseEntity<Void> realizarCheckIn(@PathVariable Long id){
+    public ResponseEntity<String> realizarCheckIn(@PathVariable Long id){
         reservaService.realizarCheckIn(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Check-in realizado com sucesso");
     }
 
 
     @Operation(summary = "Realiza o check-out da reserva", description = "Retorna status 200 de check-out realizado com sucesso")
     @PutMapping("/check-out/{id}")
     @PreAuthorize("hasRole('RECEPCIONISTA')")
-    public ResponseEntity<Void> realizarCheckOut(@PathVariable Long id){
+    public ResponseEntity<String> realizarCheckOut(@PathVariable Long id){
         reservaService.realizarCheckOut(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Check-out realizado com sucesso");
     }
 
     @Operation(summary = "Cancela uma reserva pelo ID", description = "Retorna o status 204 de reserva cancelada com sucesso")
     @PatchMapping("/cancelar/{id}")
     @PreAuthorize("hasAnyRole('GERENTE', 'RECEPCIONISTA')")
-    public ResponseEntity<Void> cancelar(@PathVariable Long id){
+    public ResponseEntity<String> cancelar(@PathVariable Long id){
         reservaService.cancelar(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Reserva cancelada com sucesso");
     }
     
     @Operation(summary = "Confirma uma reserva pelo ID", description = "Retorna os dados da reserva confirmada")
     @PatchMapping("/confirmar/{id}")
-    public ResponseEntity<ReservaDto> confirmarReserva(@PathVariable Long id){
-        var reserva = reservaService.confirmarReserva(id);
-        return ResponseEntity.ok().body(reserva);
+    public ResponseEntity<String> confirmarReserva(@PathVariable Long id){
+        reservaService.confirmarReserva(id);
+        return ResponseEntity.ok("Reserva confirmada com sucesso");
     }
 
     @Operation(summary = "Consulta o status da reserva", description = "Retorna o status da reserva")

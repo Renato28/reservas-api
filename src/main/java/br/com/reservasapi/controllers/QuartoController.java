@@ -21,18 +21,21 @@ public class QuartoController {
 
     @Operation(summary = "Listar todos os quartos", description = "Retorna uma lista completa de quartos cadastrados")
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
     public ResponseEntity<List<QuartoDto>> listarTodos() {
         return ResponseEntity.ok(quartoService.listarTodos());
     }
 
     @Operation(summary = "Busca um quarto pelo ID", description = "Retorna o quarto pelo ID informado")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
     public ResponseEntity<QuartoDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(quartoService.buscarPorId(id));
     }
 
     @Operation(summary = "Atualiza os dados de um quarto cadastrado pelo ID", description = "Retorna o status OK de quarto atualizado com sucesso")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE')")
     public ResponseEntity<QuartoDto> atualizar(@PathVariable Long id, @RequestBody QuartoDto dto) {
         QuartoDto quartoAtualizado = quartoService.atualizar(id, dto);
         return ResponseEntity.ok(quartoAtualizado);
@@ -40,6 +43,7 @@ public class QuartoController {
 
     @Operation(summary = "Cadastra um novo quarto", description = "Retorna os dados do quarto cadastrado")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE')")
     public ResponseEntity<QuartoDto> cadastrar(@Valid @RequestBody QuartoDto dto) {
         QuartoDto quartoCriado = quartoService.cadastrar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(quartoCriado);
@@ -55,6 +59,7 @@ public class QuartoController {
 
     @Operation(summary = "Deleta os dados de um quarto cadastrado pelo ID", description = "Retorna o status 204 de quarto deletado com sucesso")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         quartoService.deletar(id);
         return ResponseEntity.noContent().build();

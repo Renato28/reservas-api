@@ -1,6 +1,7 @@
 package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.ReservaDto;
+import br.com.reservasapi.dto.ReservaListagemDto;
 import br.com.reservasapi.enums.StatusQuarto;
 import br.com.reservasapi.enums.StatusReserva;
 import br.com.reservasapi.exceptions.RegraDeNegocioException;
@@ -31,10 +32,10 @@ public class ReservaService {
     private final QuartoRepository quartoRepository;
     private final ReservaMapper reservaMapper;
 
-    public List<ReservaDto> listarTodas() {
+    public List<ReservaListagemDto> listarTodas() {
         return reservaRepository.findAll()
                 .stream()
-                .map(reservaMapper::toDto)
+                .map(reservaMapper::toListagemDto)
                 .collect(Collectors.toList());
     }
 
@@ -191,7 +192,7 @@ public class ReservaService {
         reservaRepository.save(reserva);
     }
 
-    public ReservaDto confirmarReserva(Long reservaId) {
+    public void confirmarReserva(Long reservaId) {
 
         var reserva = reservaRepository.findById(reservaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
@@ -201,10 +202,7 @@ public class ReservaService {
         }
 
         reserva.setStatus(StatusReserva.CONFIRMADA);
-
-        var reservaSalva = reservaRepository.save(reserva);
-
-        return reservaMapper.toDto(reservaSalva);
+        reservaRepository.save(reserva);
     }
 
     public String consultarStatus(Long id) {
@@ -213,10 +211,10 @@ public class ReservaService {
         return reserva.getStatus().name();
     }
     
-    public List<ReservaDto> listarPorCliente(Long clienteId) {
+    public List<ReservaListagemDto> listarPorCliente(Long clienteId) {
         return reservaRepository.findByClienteId(clienteId)
                 .stream()
-                .map(reservaMapper::toDto)
+                .map(reservaMapper::toListagemDto)
                 .collect(Collectors.toList());
     }
 
