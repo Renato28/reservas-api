@@ -29,13 +29,13 @@ public class ClienteController {
     }
 
     @Operation(summary = "Busca um cliente pelo ID", description = "Retorna o cliente pelo ID informado")
-    @GetMapping("/{id}")
+    @GetMapping("/buscar/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
     public ResponseEntity<ClienteDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
-    @GetMapping("/{nome}")
+    @GetMapping("/buscar-nome/{nome}")
     @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
     @Operation(summary = "Busca um cliente pelo nome", description = "Retorna o cliente pelo nome informado")
     public ResponseEntity<ClienteDto> buscarPorNome(@PathVariable String nome) {

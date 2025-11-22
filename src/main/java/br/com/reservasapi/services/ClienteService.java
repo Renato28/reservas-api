@@ -8,6 +8,7 @@ import br.com.reservasapi.repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ public class ClienteService {
 
     public ClienteDto cadastrar(ClienteDto dto) {
         Cliente cliente = clienteMapper.toEntity(dto);
+        cliente.setDataCriacao(LocalDateTime.now());
         return clienteMapper.toDto(clienteRepository.save(cliente));
     }
 
@@ -49,6 +51,7 @@ public class ClienteService {
         clienteExistente.setEmail(dto.getEmail());
         clienteExistente.setTelefone(dto.getTelefone());
         clienteExistente.setDocumento(dto.getDocumento());
+        clienteExistente.setDataAtualizacao(LocalDateTime.now());
         return clienteMapper.toDto(clienteRepository.save(clienteExistente));
     }
 
