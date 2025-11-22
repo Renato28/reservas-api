@@ -33,6 +33,7 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .perfil(Perfil.ADMIN)
                     .ativo(true)
                     .dataCriacao(LocalDateTime.now())
+                    .dataAtualizacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(admin);
 
@@ -43,6 +44,7 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .perfil(Perfil.GERENTE)
                     .ativo(true)
                     .dataCriacao(LocalDateTime.now())
+                    .dataAtualizacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(gerente);
 
@@ -53,6 +55,7 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .perfil(Perfil.RECEPCIONISTA)
                     .ativo(true)
                     .dataCriacao(LocalDateTime.now())
+                    .dataAtualizacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(recepcionista);
 
@@ -63,6 +66,7 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .perfil(Perfil.CAMAREIRA)
                     .ativo(true)
                     .dataCriacao(LocalDateTime.now())
+                    .dataAtualizacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(camareira);
 
@@ -73,6 +77,7 @@ public class AdminUserInitializer implements CommandLineRunner {
                     .perfil(Perfil.HOSPEDE)
                     .ativo(true)
                     .dataCriacao(LocalDateTime.now())
+                    .dataAtualizacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(hospede);
 
