@@ -14,10 +14,10 @@ import java.time.LocalDate;
 public class ReservaListagemDto {
 
     private Long id;
-    private String cliente;
-    private String quarto;
+    private String nomeCliente;
+    private String numeroQuarto;
     private LocalDate dataCheckIn;
     private LocalDate dataCheckOut;
-    private BigDecimal valorTotal;
     private StatusReserva status;
+    private BigDecimal valorTotal;
 }

@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReservaResponseDto {
     private Long id;
-    private String cliente;
-    private String quarto;
+    private String nomeCliente;
+    private String numeroQuarto;
     private LocalDate dataCheckIn;
     private LocalDate dataCheckOut;
     private BigDecimal valorTotal;

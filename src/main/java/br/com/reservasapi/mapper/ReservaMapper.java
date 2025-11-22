@@ -18,12 +18,12 @@ public interface ReservaMapper {
     @Mapping(source = "quartoId", target = "quarto.id")
     Reserva toEntity(ReservaDto reservaDto);
 
-    @Mapping(source = "cliente", target = "cliente.nome")
-    @Mapping(source = "quarto", target = "quarto.numero")
+    @Mapping(target = "nomeCliente", source = "cliente.nome")
+    @Mapping(target = "numeroQuarto", source = "quarto.numero")
     ReservaListagemDto toListagemDto(Reserva reserva);
 
-    @Mapping(target = "cliente", source = "cliente.nome")
-    @Mapping(target = "quarto", source = "quarto.numero")
+    @Mapping(target = "nomeCliente", source = "cliente.nome")
+    @Mapping(target = "numeroQuarto", source = "quarto.numero")
     ReservaResponseDto toResponseDto(Reserva reserva);
 
 }
