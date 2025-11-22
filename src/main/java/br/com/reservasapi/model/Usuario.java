@@ -37,8 +37,11 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean ativo;
 
-    @Column(name = "data_criacao", nullable = false)
+    @Column(name = "data_criacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    @Column(name = "data_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime dataAtualizacao = LocalDateTime.now();
 
     public void inativar() {
         this.ativo = false;

@@ -1,5 +1,7 @@
 package br.com.reservasapi.dto;
 
+import br.com.reservasapi.enums.TipoCliente;
+import br.com.reservasapi.enums.TipoDocumento;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class ClienteDto {
 
-    private Long id;
     @NotBlank(message = "O nome é obrigatório")
     @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres")
     private String nome;
@@ -24,4 +25,6 @@ public class ClienteDto {
     private String telefone;
     @Size(max = 20, message = "O documento deve ter no máximo 20 caracteres")
     private String documento;
+    private TipoCliente tipoCliente;
+    private TipoDocumento  tipoDocumento;
 }

@@ -46,6 +46,9 @@ public class Reserva {
     @Column(name = "data_criacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
+    @Column(name = "data_atualizacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime dataAtualizacao = LocalDateTime.now();
+
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospedeReserva> hospedes = new ArrayList<>();
 

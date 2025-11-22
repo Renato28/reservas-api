@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @ValidReservaDatas
 public class ReservaDto {
 
-    private Long id;
     @NotNull(message = "O cliente é obrigatório")
     private Long clienteId;
     @NotNull(message = "O quarto é obrigatório")
@@ -29,8 +28,4 @@ public class ReservaDto {
     @NotNull(message = "A data de check-out é obrigatória")
     @FutureOrPresent(message = "A data de check-out deve ser hoje ou no futuro")
     private LocalDate dataCheckOut;
-    private BigDecimal valorTotal;
-    private StatusReserva status;
-    private LocalDateTime dataCriacao;
-
 }
