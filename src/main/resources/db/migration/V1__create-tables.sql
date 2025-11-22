@@ -30,13 +30,30 @@ CREATE TABLE quarto (
     CONSTRAINT fk_quarto_hotel FOREIGN KEY (hotel_id) REFERENCES hotel(id) ON DELETE CASCADE
 );
 
+CREATE TYPE tipo_cliente AS ENUM (
+    'PESSOA_FISICA',
+    'PESSOA_JURIDICA',
+    'AGENCIA'
+);
+
+CREATE TYPE tipo_documento AS ENUM (
+    'CPF',
+    'RG',
+    'CNPJ',
+    'PASSAPORTE'
+);
+
 -- Tabela: CLIENTE
 CREATE TABLE cliente (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL ,
     email VARCHAR(150) UNIQUE NOT NULL,
     telefone VARCHAR(30),
-    documento VARCHAR(20) UNIQUE
+    tipo_cliente tipo_cliente NOT NULL DEFAULT 'PESSOA_FISICA',
+    tipo_documento tipo_documento NOT NULL,
+    documento VARCHAR(20) UNIQUE,
+    data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TYPE status_reserva AS ENUM (
@@ -56,7 +73,8 @@ CREATE TABLE reserva (
     data_check_out DATE NOT NULL,
     valor_total NUMERIC(10,2),
     status status_reserva DEFAULT 'PENDENTE',
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_reserva_cliente FOREIGN KEY (cliente_id) REFERENCES cliente(id) ON DELETE CASCADE,
     CONSTRAINT fk_reserva_quarto FOREIGN KEY (quarto_id) REFERENCES quarto(id) ON DELETE CASCADE
 );
@@ -77,7 +95,8 @@ CREATE TABLE usuario (
     senha VARCHAR(255) NOT NULL,
     perfil perfil DEFAULT 'USER',
     ativo BOOLEAN DEFAULT TRUE,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE hospede_reserva (
