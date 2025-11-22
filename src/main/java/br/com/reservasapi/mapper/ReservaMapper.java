@@ -2,6 +2,7 @@ package br.com.reservasapi.mapper;
 
 import br.com.reservasapi.dto.ReservaDto;
 import br.com.reservasapi.dto.ReservaListagemDto;
+import br.com.reservasapi.dto.ReservaResponseDto;
 import br.com.reservasapi.model.Reserva;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,8 +18,12 @@ public interface ReservaMapper {
     @Mapping(source = "quartoId", target = "quarto.id")
     Reserva toEntity(ReservaDto reservaDto);
 
-    @Mapping(source = "cliente.nome", target = "nomeCliente")
-    @Mapping(source = "quarto.numero", target = "numeroQuarto")
+    @Mapping(source = "cliente", target = "cliente.nome")
+    @Mapping(source = "quarto", target = "quarto.numero")
     ReservaListagemDto toListagemDto(Reserva reserva);
+
+    @Mapping(target = "cliente", source = "cliente.nome")
+    @Mapping(target = "quarto", source = "quarto.numero")
+    ReservaResponseDto toResponseDto(Reserva reserva);
 
 }

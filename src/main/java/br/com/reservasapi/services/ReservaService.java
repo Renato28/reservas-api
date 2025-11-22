@@ -2,6 +2,7 @@ package br.com.reservasapi.services;
 
 import br.com.reservasapi.dto.ReservaDto;
 import br.com.reservasapi.dto.ReservaListagemDto;
+import br.com.reservasapi.dto.ReservaResponseDto;
 import br.com.reservasapi.enums.StatusQuarto;
 import br.com.reservasapi.enums.StatusReserva;
 import br.com.reservasapi.exceptions.RegraDeNegocioException;
@@ -14,6 +15,7 @@ import br.com.reservasapi.repositories.QuartoRepository;
 import br.com.reservasapi.repositories.ReservaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -39,10 +41,10 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
-    public ReservaDto buscarPorId(Long id) {
+    public ReservaResponseDto buscarPorId(Long id) {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
-        return reservaMapper.toDto(reserva);
+        return reservaMapper.toResponseDto(reserva);
     }
 
     public ReservaDto cadastrar(ReservaDto dto) {
@@ -72,11 +74,11 @@ public class ReservaService {
             throw new RegraDeNegocioException("A reserva deve ser no minimo 1 dia de duração");
         }
         BigDecimal valorTotal = quarto.getPrecoDiaria().multiply(new BigDecimal(dias));
-        dto.setValorTotal(valorTotal);
 
         Reserva reserva = reservaMapper.toEntity(dto);
         reserva.setCliente(cliente);
         reserva.setQuarto(quarto);
+        reserva.setValorTotal(valorTotal);
         reserva.setStatus(StatusReserva.PENDENTE);
         reserva.setDataCriacao(LocalDateTime.now());
         Reserva reservaSalvo = reservaRepository.save(reserva);
@@ -99,9 +101,8 @@ public class ReservaService {
 
         reservaExistente.setDataCheckIn(reservaDto.getDataCheckIn());
         reservaExistente.setDataCheckOut(reservaDto.getDataCheckOut());
-        reservaExistente.setValorTotal(reservaDto.getValorTotal());
-        reservaExistente.setStatus(reservaDto.getStatus());
         reservaExistente.setQuarto(quarto);
+        reservaExistente.setDataAtualizacao(LocalDateTime.now());
 
         long dias = ChronoUnit.DAYS.between(reservaDto.getDataCheckIn(), reservaDto.getDataCheckOut());
         reservaExistente.setValorTotal(quarto.getPrecoDiaria().multiply(new BigDecimal(dias)));
@@ -238,5 +239,17 @@ public class ReservaService {
         boolean existeReserva = reservaRepository.existeReservaNoPeriodo(quartoId, dataCheckIn, dataCheckOut);
         
         return !existeReserva;
+    }
+
+    @Transactional
+    public ReservaResponseDto atualizarStatus(Long id, StatusReserva statusReserva) {
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada!"));
+        reserva.setStatus(statusReserva);
+        reserva.setDataAtualizacao(LocalDateTime.now());
+
+        Reserva reservaAtualizada = reservaRepository.save(reserva);
+
+        return reservaMapper.toResponseDto(reservaAtualizada);
     }
 }

@@ -1,7 +1,9 @@
 package br.com.reservasapi.controllers;
 
+import br.com.reservasapi.dto.AtualizarStatusReservaDto;
 import br.com.reservasapi.dto.ReservaDto;
 import br.com.reservasapi.dto.ReservaListagemDto;
+import br.com.reservasapi.dto.ReservaResponseDto;
 import br.com.reservasapi.services.ReservaService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -39,7 +41,7 @@ public class ReservaController {
     @Operation(summary = "Busca uma reserva pelo ID", description = "Retorna a reserva pelo ID informado")
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
-    public ResponseEntity<ReservaDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ReservaResponseDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok().body(reservaService.buscarPorId(id));
     }
 
@@ -51,14 +53,20 @@ public class ReservaController {
         return ResponseEntity.ok(reservaAtualizada);
     }
 
+    @PatchMapping("/atualizar-status/{id}")
+    @Operation(summary = "Atualiza o status da reserva", description = "Retorna os dados da reserva com status atualizado.")
+    public ResponseEntity<ReservaResponseDto> atualizarStatus(@PathVariable Long id, @RequestBody AtualizarStatusReservaDto dto) {
+        ReservaResponseDto statusAtualizado = reservaService.atualizarStatus(id, dto.getStatusReserva());
+        return ResponseEntity.ok(statusAtualizado);
+    }
+
     @Operation(summary = "Cadastra uma nova reserva", description = "Retorna os dados da reserva cadastrada")
     @PostMapping
     @PreAuthorize("hasAnyRole('RECEPCIONISTA', 'HOSPEDE')")
     public ResponseEntity<ReservaDto> cadastrar(@Valid @RequestBody ReservaDto dto) {
         ReservaDto novaReserva = reservaService.cadastrar(dto);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(novaReserva);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaReserva);
     }
-
 
     @Operation(summary = "Realiza o check-in da reserva", description = "Retorna status 200 de check-in realizado com sucesso")
     @PutMapping("/check-in/{id}")
