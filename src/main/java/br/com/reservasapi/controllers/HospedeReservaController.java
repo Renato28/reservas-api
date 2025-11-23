@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/reservas")
+@RequestMapping("/api/hospedes")
 @RequiredArgsConstructor
 @Tag(name = "Hospedes", description = "Gerenciamento de hospedes da reserva")
 public class HospedeReservaController {
@@ -17,7 +17,7 @@ public class HospedeReservaController {
     private final HospedeReservaService hospedeReservaService;
 
     @Operation(summary = "Adiciona um hospede a reserva", description = "Retorna os dados da reserva atualizada com hospede adicionar")
-    @PostMapping("/{id}/hospedes")
+    @PostMapping("/hospedes/{id}")
     public ResponseEntity<?> adicionarHospede(
             @PathVariable Long id,
             @RequestBody HospedeReservaRequest request
