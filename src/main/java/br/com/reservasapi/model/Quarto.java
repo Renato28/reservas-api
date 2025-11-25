@@ -1,6 +1,7 @@
 package br.com.reservasapi.model;
 
 import br.com.reservasapi.enums.StatusQuarto;
+import br.com.reservasapi.enums.TipoQuarto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +23,8 @@ public class Quarto {
     @Column(nullable = false, length = 20)
     private String numero;
 
-    @Column(length = 50)
-    private String tipo;
+    @Enumerated(EnumType.STRING)
+    private TipoQuarto tipo;
 
     @Column(name = "preco_diaria", nullable = false, precision = 10, scale = 2)
     private BigDecimal precoDiaria;

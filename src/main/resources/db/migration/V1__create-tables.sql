@@ -19,11 +19,17 @@ CREATE TYPE status_quarto AS ENUM (
     'MANUTENCAO'
 );
 
+CREATE TYPE tipo_quarto AS ENUM (
+    'STANDARD',
+    'LUXO'
+    'MASTER'
+);
+
 -- Tabela QUARTO
 CREATE TABLE quarto (
     id BIGSERIAL PRIMARY KEY,
     numero VARCHAR(20) NOT NULL,
-    tipo VARCHAR(50),
+    tipo tipo_quarto DEFAULT 'STANDARD',
     preco_diaria NUMERIC(10,2) NOT NULL,
     status status_quarto DEFAULT 'DISPONIVEL',
     hotel_id BIGSERIAL NOT NULL,
