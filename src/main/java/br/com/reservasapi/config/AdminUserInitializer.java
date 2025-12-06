@@ -19,7 +19,7 @@ public class AdminUserInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String adminEmail = "admin@hotel.com";
+        String adminEmail = "renatonobrega87@gmail.com";
         String gerenteEmail = "gerente@hotel.com";
         String recepcionistaEmail = "recepcionista@hotel.com";
         String camareiraEmail = "camareira@hotel.com";

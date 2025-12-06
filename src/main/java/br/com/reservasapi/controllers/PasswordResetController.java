@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -22,13 +24,13 @@ public class PasswordResetController {
     @Operation(summary = "Envia e-mail para recuperação de senha", description = "Retorna mensagem de e-mail enviado")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         passwordResetService.solicitarRecuperacao(request.getEmail());
-        return ResponseEntity.ok("E-mail enviado para recuperação de senha.");
+          return ResponseEntity.ok(Map.of("message", "E-mail enviado para recuperação de senha"));
     }
 
     @PostMapping("/reset-password")
     @Operation(summary = "Redefinição de senha", description = "Retorna mensagem de senha redefinida com sucesso.")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
         passwordResetService.redefinirSenha(request.getToken(), request.getNovaSenha());
-        return ResponseEntity.ok("Senha redefinida com sucesso.");
+          return ResponseEntity.ok(Map.of("message", "Senha redefinida com sucesso"));
     }
 }
