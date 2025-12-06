@@ -1,15 +1,26 @@
 package br.com.reservasapi.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
+    private final JavaMailSender mailSender;
+
     public void enviarEmail(String para, String assunto, String mensagem) {
-        System.out.println("-----E-MAIL FAKE -----");
-        System.out.println("Para: " + para);
-        System.out.println("Assunto: " + assunto);
-        System.out.println("Mensagem: " + mensagem);
-        System.out.println("-------------------");
+
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(para);
+            mailMessage.setSubject(assunto);
+            mailMessage.setText(mensagem);
+            mailSender.send(mailMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
