@@ -3,15 +3,27 @@
 -- Sistema de Reservas de Hotel
 -- ==========================================
 
+-- Tabela ENDERECO
+CREATE TABLE endereco (
+    id BIGSERIAL PRIMARY KEY,
+    cep VARCHAR(9),
+    logradouro VARCHAR(150) NOT NULL,
+    numero VARCHAR(20),
+    complemento VARCHAR(100),
+    bairro VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(2) NOT NULL
+);
+
 -- Tabela HOTEL
 CREATE TABLE hotel (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
-    endereco VARCHAR(255),
-    cidade VARCHAR(100),
-    estado VARCHAR(100),
-    telefone VARCHAR(30)
+    telefone VARCHAR(30),
+    endereco_id BIGINT NOT NULL,
+    CONSTRAINT fk_hotel_endereco FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 );
+
 
 CREATE TYPE status_quarto AS ENUM (
     'DISPONIVEL',
