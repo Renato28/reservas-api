@@ -19,16 +19,11 @@ public class Hotel {
     @Column(nullable = false, length = 150)
     private String nome;
 
-    @Column(length = 255)
-    private String endereco;
-
-    @Column(length = 100)
-    private String cidade;
-
-    @Column(length = 100)
-    private String estado;
-
     @Column(length = 30)
     private String telefone;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id", foreignKey = @ForeignKey(name = "fk_hotel_endereco"))
+    private Endereco endereco;
 }
 
