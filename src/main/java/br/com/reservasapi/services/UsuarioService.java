@@ -24,6 +24,7 @@ public class UsuarioService {
         }
 
         Usuario usuario = Usuario.builder()
+                .nome(dto.getNome())
                 .email(dto.getEmail())
                 .senha(passwordEncoder.encode(dto.getSenha()))
                 .perfil(dto.getPerfil())

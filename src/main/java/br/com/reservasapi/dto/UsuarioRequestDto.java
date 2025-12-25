@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class UsuarioRequestDto {
 
+    @NotBlank(message = "O nome do usuário é obrigatório")
+    private String nome;
     @NotBlank(message = "O e-mail do usuário é obrigatório")
     @Email(message = "Formato inválido")
     private String email;
