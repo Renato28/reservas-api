@@ -20,11 +20,13 @@ public class QuartoDto {
     @NotNull(message = "O número do quarto é obrigatório")
     @Positive(message = "O numero do quarto deve ser positivo")
     private String numero;
-    @NotBlank(message = "O tipo do quarto é obrigatório")
+    @NotNull(message = "O tipo do quarto é obrigatório")
     private TipoQuarto tipo;
     @NotNull(message = "O preço é obrigatório")
     @Positive(message = "O preço deve ser positivo")
     private BigDecimal precoDiaria;
+    @NotNull
     private StatusQuarto status;
+    @NotNull
     private Long hotelId;
 }
