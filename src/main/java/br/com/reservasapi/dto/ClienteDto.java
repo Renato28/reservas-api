@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ClienteDto {
 
+    private Long id;
     @NotBlank(message = "O nome é obrigatório")
     @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres")
     private String nome;
