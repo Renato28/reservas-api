@@ -20,6 +20,7 @@ public interface ReservaMapper {
 
     @Mapping(target = "nomeCliente", source = "cliente.nome")
     @Mapping(target = "numeroQuarto", source = "quarto.numero")
+    @Mapping(target = "nomeHotel", source = "quarto.hotel.nome")
     ReservaListagemDto toListagemDto(Reserva reserva);
 
     @Mapping(target = "nomeCliente", source = "cliente.nome")

@@ -15,6 +15,7 @@ public class ReservaListagemDto {
 
     private Long id;
     private String nomeCliente;
+    private String nomeHotel;
     private String numeroQuarto;
     private LocalDate dataCheckIn;
     private LocalDate dataCheckOut;
