@@ -11,8 +11,8 @@ CREATE TABLE endereco (
     numero VARCHAR(20),
     complemento VARCHAR(100),
     bairro VARCHAR(100) NOT NULL,
-    cidade VARCHAR(100) NOT NULL,
-    estado VARCHAR(2) NOT NULL
+    localidade VARCHAR(100),
+    uf VARCHAR(2)
 );
 
 -- Tabela HOTEL
