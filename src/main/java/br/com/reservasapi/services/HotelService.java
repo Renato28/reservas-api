@@ -66,8 +66,8 @@ public class HotelService {
         endereco.setCep(dto.getEndereco().getCep());
         endereco.setLogradouro(dto.getEndereco().getLogradouro());
         endereco.setBairro(dto.getEndereco().getBairro());
-        endereco.setCidade(dto.getEndereco().getCidade());
-        endereco.setEstado(dto.getEndereco().getEstado());
+        endereco.setLocalidade(dto.getEndereco().getLocalidade());
+        endereco.setUf(dto.getEndereco().getUf());
 
         Hotel atualizado = hotelRepository.save(hotel);
 
