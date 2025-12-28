@@ -110,8 +110,8 @@ public class ReservaService {
         return  reservaMapper.toDto(reservaRepository.save(reservaExistente));
     }
 
-    public void realizarCheckIn(Long idReserva) {
-        Reserva reserva = reservaRepository.findById(idReserva)
+    public void realizarCheckIn(Long codigoReserva) {
+        Reserva reserva = reservaRepository.findByCodigo(codigoReserva)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva não encontrada"));
 
         // Verifica se já foi feito o check-in

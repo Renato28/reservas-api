@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReservaResponseDto {
-    private Long id;
+    private Long codigo;
     private String nomeCliente;
     private String numeroQuarto;
     private LocalDate dataCheckIn;

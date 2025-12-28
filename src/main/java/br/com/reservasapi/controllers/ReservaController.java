@@ -32,7 +32,7 @@ public class ReservaController {
     }
 
     @Operation(summary = "Lista as reservas pelo ID do cliente", description = "Retorna uma lista completa de reservas pelo cliente")
-    @GetMapping("/{clienteId}")
+    @GetMapping("/cliente/{clienteId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'RECEPCIONISTA', 'CAMAREIRA', 'HOSPEDE')")
     public ResponseEntity<List<ReservaListagemDto>> listarPorCliente(@PathVariable Long clienteId) {
         return ResponseEntity.ok().body(reservaService.listarPorCliente(clienteId));
@@ -69,10 +69,10 @@ public class ReservaController {
     }
 
     @Operation(summary = "Realiza o check-in da reserva", description = "Retorna status 200 de check-in realizado com sucesso")
-    @PutMapping("/check-in/{id}")
+    @PutMapping("/check-in/{codigo}")
     @PreAuthorize("hasRole('RECEPCIONISTA')")
-    public ResponseEntity<String> realizarCheckIn(@PathVariable Long id){
-        reservaService.realizarCheckIn(id);
+    public ResponseEntity<String> realizarCheckIn(@PathVariable Long codigo){
+        reservaService.realizarCheckIn(codigo);
         return ResponseEntity.ok("Check-in realizado com sucesso");
     }
 

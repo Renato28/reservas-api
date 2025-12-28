@@ -84,7 +84,7 @@ CREATE TYPE status_reserva AS ENUM (
 
 -- Tabela: RESERVA
 CREATE TABLE reserva (
-    id BIGSERIAL PRIMARY KEY,
+    codigo BIGSERIAL PRIMARY KEY,
     cliente_id BIGSERIAL NOT NULL,
     quarto_id BIGSERIAL NOT NULL,
     data_check_in DATE NOT NULL,
@@ -121,10 +121,10 @@ CREATE TABLE hospede_reserva (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     documento VARCHAR(20),
-    reserva_id BIGSERIAL NOT NULL,
+    reserva_codigo BIGSERIAL NOT NULL,
     CONSTRAINT fk_hospede_reserva_reserva
-        FOREIGN KEY (reserva_id)
-        REFERENCES reserva(id)
+        FOREIGN KEY (reserva_codigo)
+        REFERENCES reserva(codigo)
         ON DELETE CASCADE
 );
 
