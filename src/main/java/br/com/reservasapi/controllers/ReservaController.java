@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -70,19 +71,19 @@ public class ReservaController {
 
     @Operation(summary = "Realiza o check-in da reserva", description = "Retorna status 200 de check-in realizado com sucesso")
     @PutMapping("/check-in/{codigo}")
-    @PreAuthorize("hasRole('RECEPCIONISTA')")
-    public ResponseEntity<String> realizarCheckIn(@PathVariable Long codigo){
+    @PreAuthorize("hasAnyRole('RECEPCIONISTA', 'GERENTE')")
+    public ResponseEntity<Map<String, String>> realizarCheckIn(@PathVariable Long codigo){
         reservaService.realizarCheckIn(codigo);
-        return ResponseEntity.ok("Check-in realizado com sucesso");
+        return ResponseEntity.ok(Map.of("message", "Check-in realizado com sucesso"));
     }
 
 
     @Operation(summary = "Realiza o check-out da reserva", description = "Retorna status 200 de check-out realizado com sucesso")
     @PutMapping("/check-out/{id}")
     @PreAuthorize("hasRole('RECEPCIONISTA')")
-    public ResponseEntity<String> realizarCheckOut(@PathVariable Long id){
+    public ResponseEntity<Map<String, String>> realizarCheckOut(@PathVariable Long id){
         reservaService.realizarCheckOut(id);
-        return ResponseEntity.ok("Check-out realizado com sucesso");
+        return ResponseEntity.ok(Map.of("message", "Check-out realizado com sucesso"));
     }
 
     @Operation(summary = "Cancela uma reserva pelo ID", description = "Retorna o status 204 de reserva cancelada com sucesso")

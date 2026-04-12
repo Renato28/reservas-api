@@ -63,9 +63,9 @@ public class ReservaService {
             throw new RegraDeNegocioException("A data de check-out deve ser posterior à data de check-in");
         }
 
-        boolean quartoDisponivel = reservaRepository.existeReservaNoPeriodo(
+        boolean existeReserva = reservaRepository.existeReservaNoPeriodo(
                 quarto.getId(), dto.getDataCheckIn(), dto.getDataCheckOut());
-        if (quartoDisponivel) {
+        if (existeReserva) {
             throw new RegraDeNegocioException("O quarto selecionado já está reservado nesse periodo");
         }
 
